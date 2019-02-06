@@ -36,7 +36,7 @@ C++(gcc) compiler
 # Installation Guide
 To install the package, use git clone:
 
-https://github.com/rowickalab/qDSB-Seq.git
+    git clone https://github.com/rowickalab/qDSB-Seq.git
 
 Or download the package and then unzip:
 
