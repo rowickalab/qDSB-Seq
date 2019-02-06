@@ -78,4 +78,4 @@ if( $enzyme_type eq '5' ){
     $switch='.switch';
 }
     
-`Rscript $Bin/qDSB-seq.R -s $sample_name -e $enzyme_name -g $group_sample -m process_gDNA_data/cutting_efficiency_$enzyme_name/$prefix.$enzyme_name.L0-R0.exact$switch.txt -b process_gDNA_data/cutting_efficiency_$enzyme_name/$prefix.$enzyme_name.background.exact$switch.txt -r process_DSB-seq_data/get_$enzyme_name\_reads/$prefix.$enzyme_name.flank_0_0.txt -d process_DSB-seq_data/map_SE_to_$genome_name\_btt_depth/$prefix.startDepth.plus_and_minus.wig -t 2 -c 10 -n 0 -a 1 -p $prefix`;
+`Rscript $Bin/qDSB-seq.R -s $sample_name -e $enzyme_name -g $group_sample -m process_gDNA_data/cutting_efficiency_$enzyme_name/$prefix.$enzyme_name.L0-R0.exact$switch.txt -b process_gDNA_data/cutting_efficiency_$enzyme_name/$prefix.$enzyme_name.background.exact$switch.txt -r process_DSB-seq_data/get_$enzyme_name\_reads/$prefix.$enzyme_name.flank_0_0.txt -d process_DSB-seq_data/map_SE_to_$genome_name\_btt_depth/$prefix.startDepth.plus_and_minus.bedGraph -t 2 -c 10 -n 0 -a 1 -p $prefix`;

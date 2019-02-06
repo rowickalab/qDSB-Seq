@@ -144,15 +144,24 @@ Running this code will result in creation of two directories and one summary fil
     process_DSB-seq_data
     process_gDNA_data
     output.DSBs.summary.txt
+    output.DSBs_perM.bedGraph
 
-process_DSB-seq_data includes mapping file and coverage files on DSB sequencing data. 
+"process_DSB-seq_data" includes mapping file and coverage files on DSB sequencing data. 
 
-process_gDNA_data includes mapping file and cutting efficiency files. Enzyme cutting efficiencies and genome background are under cutting_efficiency_NotI.
+"process_gDNA_data" includes mapping file and cutting efficiency files. Enzyme cutting efficiencies and genome background are under cutting_efficiency_NotI.
 
-output.DSBs.summary.txt contains DSBs per cell or DSB frequencies on the whole reference genome: 
+"output.DSBs.summary.txt" contains DSBs per cell or DSB frequencies on the whole reference genome.
 
     sample_name     group   enzyme_name     reads_from_enzyme       reads_from_studied_DSBs fcut_rmbg       DSBs    DSBs_sd_by_site DSBs_sd_by_fcut nsites  cor_fcut_labeled_reads
     test    G1      NotI    498320  501485  0.103111        0.207532        0.06483 0.175323        2       1
+
+"output.DSBs_perM.bedGraph" contains DSBs per million cells at studied positions. The positive and negative values represents detected DSBs on Watson and Crick strands, respectively.
+
+    chrII_487089-489089     1001    1002    62223
+    chrII_487089-489089     1001    1002    -20
+    chrII_487089-489089     1002    1003    892
+    chrII_487089-489089     1002    1003    -1214
+
 
 # Citation
 

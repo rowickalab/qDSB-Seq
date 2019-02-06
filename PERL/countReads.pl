@@ -6,9 +6,9 @@ use Getopt::Long;
 if( @ARGV<2 ){
     print "
 This script counts the number of reads in a specific region (eg. G-quadruplex) included in a bed file (3 columns: chr start end).
-The sequencing depth for each position on the genome is saved in a wig file (4 colums: chr start end depth). 
+The sequencing depth for each position on the genome is saved in a bedGraph file (4 colums: chr start end depth). 
 
-Usage: perl $0 <bed_file> <wig_file> [options] 
+Usage: perl $0 <bed_file> <bedGraph_file> [options] 
 
     -d CHARACTER	output directory
     -p CHARACTER	output prefix

@@ -103,4 +103,16 @@ count_sequence <- function(data){
     nrow(data)   
 }
 
+# calculate DSBs
+calc_DSBs <- function(sum_of_labeled_reads_studied,sum_of_labeled_reads_enz,fcut,nsites,index_12DSB,mixprop){
 
+    DSBs <- (sum_of_labeled_reads_studied * fcut * nsites * index_12DSB * mixprop ) / sum_of_labeled_reads_enz
+
+}
+
+# calculate DSBs perl million cells
+calc_DSBs_perM <- function(labeled_reads_studied,sum_of_labeled_reads_enz,fcut,nsites,index_12DSB,mixprop){
+
+    DSBs_perM <- (labeled_reads_studied * fcut * nsites * index_12DSB * mixprop ) / sum_of_labeled_reads_enz * 1000000
+
+}

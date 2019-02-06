@@ -1,5 +1,5 @@
 #!/usr/bin/Rscript
-# take cutting efficiency for each site, labeled reads on each site, wig for labeled reads
+# take cutting efficiency for each site, labeled reads on each site, bedGraph for labeled reads
 # then calculate labeled reads for each DSB, and total studied DSBs
 # Author: Yingjie Zhu yizhu@utmb.edu
 
@@ -79,8 +79,8 @@ table_fbg   <- opt$fbg
 # Chr BED_start BED_end Name Start End Region_size Total_reads Perc_total Plus_reads Perc_plus
 #  Minus_reads Perc_minus Peak_reads Perc_peak_reads Plus_peak_reads Perc_plus_peak_reads Minus_peak_reads Perc_minus_peak_reads Summit_reads Perc_summit_reads
 table_labeled_reads_on_enz     <- opt$renzyme
-# wig contains no. of 1-DSB reads
-wig_labeled_reads_studied    <- opt$rstudied
+# bedGraph contains no. of 1-DSB reads
+bedGraph_labeled_reads_studied    <- opt$rstudied
 # an index for 1-DSB and 2DSB calculation, if 1-DSB the index is 2, if 2-DSB it is 1
 index_12DSB <- opt$type
 # minimum of coverage for gDNA reads on cutting site
@@ -109,7 +109,7 @@ data_fbg  <- read.table(table_fbg,header=T)
  # Reads on cutting sites
 data_labeled_reads_on_enz   <- read.table(table_labeled_reads_on_enz,header=T)
  # Reads on studied DSBs
-data_labeled_reads_studied  <- read.table(wig_labeled_reads_studied)
+data_labeled_reads_studied  <- read.table(bedGraph_labeled_reads_studied)
 
 # remove unnecessary columns from data_fcut
 
@@ -185,8 +185,17 @@ sum_of_labeled_reads_enz <- sum(data_fcut$labeled_reads)
 # calculate DSBs
 
 index_12DSB   <- ifelse(index_12DSB==1,2,1)
-total_DSBs    <- round((sum_of_labeled_reads_studied * fcut_rmbg * nsites * index_12DSB * mixprop ) /sum_of_labeled_reads_enz,6)
-total_DSBs_sd <- round((sum_of_labeled_reads_studied * fcut_sd * nsites * index_12DSB * mixprop ) / sum_of_labeled_reads_enz,6)
+total_DSBs    <- round(calc_DSBs(sum_of_labeled_reads_studied,sum_of_labeled_reads_enz,fcut_rmbg,nsites,index_12DSB,mixprop),6)
+total_DSBs_sd    <- round(calc_DSBs(sum_of_labeled_reads_studied,sum_of_labeled_reads_enz,fcut_sd,nsites,index_12DSB,mixprop),6)
+
+# calculate DSBs at studied positions
+
+DSBs_perM <- round(calc_DSBs_perM(data_labeled_reads_studied$V4,sum_of_labeled_reads_enz,fcut_rmbg,nsites,index_12DSB,mixprop),6)
+
+df_DSBs_perM <- data.frame(data_labeled_reads_studied$V1,data_labeled_reads_studied$V2,data_labeled_reads_studied$V3,DSBs_perM)
+
+write.table(df_DSBs_perM,paste(prefix,"DSBs_perM.bedGraph",sep="."),quote=FALSE,sep="\t",col.names=F,row.names=F)
+
 
 # induced DSBs
 

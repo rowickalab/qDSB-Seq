@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Data::Dumper;
 
 if( @ARGV<3 ){
     print STDERR "perl $0 <btt file> <chr length file: chr length> <output prefix> <ignore zero depth: 0 (default) or 1> <first or full read depth or fragment depth: 1 or 2 or 3>\n
@@ -50,7 +51,7 @@ if( $first_depth == 1 ){
     $out4="$prefix.fragDepth.plus-minus";
 }
 
-`rm -rf $chr_dir $out1.wig $out2.wig $out3.wig $out4.wig`;
+`rm -rf $chr_dir $out1.bedGraph $out2.bedGraph $out3.bedGraph $out4.bedGraph`;
 mkdir $chr_dir;
 
 
@@ -58,10 +59,10 @@ foreach my $chr(sort keys %$href_depth){
     print STDERR $chr,"\n";
     my $h=$href_depth->{$chr};
 
-    open(OUT1," > $chr_dir/$out1.$chr.wig");
-    open(OUT2," > $chr_dir/$out2.$chr.wig");
-    open(OUT4," > $chr_dir/$out3.$chr.wig");
-    open(OUT3," > $chr_dir/$out4.$chr.wig");
+    open(OUT1," > $chr_dir/$out1.$chr.bedGraph");
+    open(OUT2," > $chr_dir/$out2.$chr.bedGraph");
+    open(OUT4," > $chr_dir/$out3.$chr.bedGraph");
+    open(OUT3," > $chr_dir/$out4.$chr.bedGraph");
     my $o1="";
     my $o2="";
     my $o3="";
@@ -107,10 +108,10 @@ foreach my $chr(sort keys %$href_depth){
     print OUT3 $o3;
     print OUT4 $o4;
 
-   `cat $chr_dir/$out1.$chr.wig >> $out1.wig`;
-   `cat $chr_dir/$out2.$chr.wig >> $out2.wig`;
-   `cat $chr_dir/$out3.$chr.wig >> $out3.wig`;
-   `cat $chr_dir/$out4.$chr.wig >> $out4.wig`;
+   `cat $chr_dir/$out1.$chr.bedGraph >> $out1.bedGraph`;
+   `cat $chr_dir/$out2.$chr.bedGraph >> $out2.bedGraph`;
+   `cat $chr_dir/$out3.$chr.bedGraph >> $out3.bedGraph`;
+   `cat $chr_dir/$out4.$chr.bedGraph >> $out4.bedGraph`;
 
     close OUT1;
     close OUT2;

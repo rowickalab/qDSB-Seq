@@ -4,11 +4,11 @@ use warnings;
 use Data::Dumper;
 
 if( @ARGV<4 ){
-    print STDERR "Usage: perl $0 <wig file> <flanking size of bed> <ignore locations in bed: 1 or not 0> <bed files>\n";
+    print STDERR "Usage: perl $0 <bedGraph file> <flanking size of bed> <ignore locations in bed: 1 or not 0> <bed files>\n";
     exit;
 }
 
-my $wig_file=shift;
+my $bedGraph_file=shift;
 my $flanking_size=shift;
 my $ignore=shift;
 my @bed_files=@ARGV;
@@ -24,7 +24,7 @@ foreach my $bed_file(@bed_files){
     close BED;
 }
 
-open(WIG,$wig_file);
+open(WIG,$bedGraph_file);
 while(<WIG>){
 
     my @cols=split;

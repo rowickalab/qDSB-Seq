@@ -33,8 +33,8 @@ Prefix=$8
 
 # it will map DSB sequencing reads to genome
 map_genome=1
-# it will create wig file from btt file
-create_wig=1
+# it will create bedGraph file from btt file
+create_bedGraph=1
 # count reads from enzyme cutting sites
 count_enzyme_reads=1
 
@@ -56,12 +56,12 @@ then
 
 fi
 
-# create wig 
+# create bedGraph 
 depth_dir=$btt_dir\_depth
-if [ $create_wig == 1 ]
+if [ $create_bedGraph == 1 ]
 then
         echo ""
-        echo "Running: convert genome btt to wig"
+        echo "Running: convert genome btt to bedGraph"
         echo ""
         cd $MAINDIR
         if [ ! -d $depth_dir ]; then
@@ -69,7 +69,7 @@ then
         fi
         cd $depth_dir
 
-        # create startDepth.wig, startDepth.plus_and_minus.wig, startDepth.plus-minus.wig
+        # create startDepth.bedGraph, startDepth.plus_and_minus.bedGraph, startDepth.plus-minus.bedGraph
         #echo $BINDIR/PERL/btt_to_depth_fast.pl ../$btt_dir/$Prefix\.bt.btt $chr_length $Prefix 1 1 
         #echo ""
         perl $BINDIR/PERL/btt_to_depth_fast.pl ../$btt_dir/$Prefix\.bt.btt $chr_length $Prefix 1 1 > $Prefix\.btt_to_depth.log 2>&1
@@ -86,9 +86,9 @@ then
         echo ""
         cd $MAINDIR
 
-        #echo $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.wig -d $enzyme_reads_dir -p $Prefix.$enzyme_name 
+        #echo $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.bedGraph -d $enzyme_reads_dir -p $Prefix.$enzyme_name 
         #echo ""
-        perl $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.wig -d $enzyme_reads_dir -p $Prefix.$enzyme_name > $enzyme_reads_dir.log 2>&1
+        perl $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.bedGraph -d $enzyme_reads_dir -p $Prefix.$enzyme_name > $enzyme_reads_dir.log 2>&1
 
         echo "Done"
 fi
