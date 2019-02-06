@@ -21,8 +21,8 @@ Linux: Fedora 20
 1.	Download R from http://cran.us.r-project.org/, click “Download R for Linux” to download latest version.
 2.	Install R. Leave all default settings in the installation options.
 ### R package dependencies 
-    Once R is installed, type ‘R’ to enter into console, install the packages needed:
-install.packages(“optparse”)
+Once R is installed, type ‘R’ to enter into console, install the packages needed:
+    install.packages(“optparse”)
 The versions of packages are:
 optparse: 1.6.0
 ### Other requirements 
@@ -40,23 +40,25 @@ compile btt software that convert bowtie output (gcc required):
 qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy use. To get help, type ‘perl qDSB-Seq.pl’ on the command line of Linux. Here who can follow the example to learn how to use. This example come from real data, but a selected dataset. The genome is cleaved by NotI enzyme. Let’s enter into the ‘example’ directory.
 Before running the code, the users should prepare or know the input data as follows:
 1)	Sequencing reads from DSB sequencing, only sequence without name and quality inside
-test_i-BLESS.seq
-GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
-GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
-GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
+    test_i-BLESS.seq
+    
+    GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
+    GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
+    GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
 2)	Paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
-test_gDNA.R1.seq
-test_gDNA.R2.seq
+    test_gDNA.R1.seq
+    test_gDNA.R2.seq
 
 3)	bowtie index of reference genome built by bowtie
-reference_genome/test.reference_genome.bowtie
+    reference_genome/test.reference_genome.bowtie
 
 4)	enzyme cutting sites, it can be obtain from XXX
-NotI.bed
+    NotI.bed
 
 5)	genome background to remove sequencing fragmentation noise. It can be obtained by running R code on command line
-
+    background.bed
+    
 The example was cut by NotI enzyme, which cleaves the substrate sequences and creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced.
 
 By running this code, it will produce two directories and one summary file. 
