@@ -6,11 +6,11 @@ With the development of label-based DSB sequencing technologies, DSB quantificat
 
 # System requirement
 ## Hardware Requirements
-The qDSB-Seq package requires only a computer with enough RAM to support the operations defined by a user. The RAM depends on how big the datasets and the genome size are. For minimal performance, this will be a computer with about 128 GB of RAM. For optimal performance, we recommend a computer with the following specs:
+The qDSB-Seq package requires a computer with enough RAM to support the operations defined by a user. The RAM depends on how big the datasets and the genome size are. For minimal performance, it will be a standard computer with about 8 GB of RAM for our example provided. For optimal performance, we recommend a server with the following specs:
 
 RAM: 256+ GB
 
-CPU: 4+ cores, 3.1+ GHz/core
+CPU: 8+ cores, 3.1+ GHz/core
 
 ## Software Requirements
 ### OS Requirements
@@ -22,7 +22,9 @@ Linux: Fedora 20
 2.	Install R. Leave all default settings in the installation options.
 ### R package dependencies 
 Once R is installed, type ‘R’ to enter into console, install the packages needed:
+
     install.packages(“optparse”)
+
 The versions of packages are:
 optparse: 1.6.0
 ### Other requirements 
@@ -40,6 +42,7 @@ compile btt software that convert bowtie output (gcc required):
 qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy use. To get help, type ‘perl qDSB-Seq.pl’ on the command line of Linux. Here who can follow the example to learn how to use. This example come from real data, but a selected dataset. The genome is cleaved by NotI enzyme. Let’s enter into the ‘example’ directory.
 Before running the code, the users should prepare or know the input data as follows:
 1)	Sequencing reads from DSB sequencing, only sequence without name and quality inside
+
     test_i-BLESS.seq
     
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
@@ -47,6 +50,7 @@ Before running the code, the users should prepare or know the input data as foll
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
 2)	Paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
+
     test_gDNA.R1.seq
     test_gDNA.R2.seq
 
