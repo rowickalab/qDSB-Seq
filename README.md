@@ -111,8 +111,12 @@ To build your bowtie index:
 5.genome background to remove sequencing fragmentation noise. It can be obtained by running R code on command line
   
     background.bed
+   
+For your own genome background:
+
+    Rscript ../R/generate_background_bed.R chromosome_length number_of_locations output
     
-To run the example:
+To run the code for the example:
 
     cd example
 
