@@ -93,7 +93,7 @@ Here who can follow the example to learn how to run this code. This example come
 
 Before running the code, who should prepare or use the input data as follows:
  
-1)Sequencing reads from DSB sequencing, only sequence without name and quality inside
+1)sequencing reads from DSB sequencing, only sequence without name and quality inside
     
     test_i-BLESS.seq
     
@@ -101,7 +101,7 @@ Before running the code, who should prepare or use the input data as follows:
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
-2)Paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
+2)paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
 
     test_gDNA.R1.seq
     test_gDNA.R2.seq
@@ -118,7 +118,7 @@ To build your own bowtie index:
   
     NotI.bed
 
-5.genome background to remove sequencing fragmentation noise.
+5)genome background to remove sequencing fragmentation noise.
   
     background.bed
    
