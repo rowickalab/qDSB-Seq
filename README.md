@@ -8,7 +8,6 @@ With the development of label-based DSB sequencing technologies, DSB quantificat
 ## Hardware Requirements
 The qDSB-Seq package requires a computer with enough RAM to support the operations defined by a user. The RAM depends on how big the datasets and the genome size are. For minimal performance, it will be a standard computer with about 8 GB of RAM for our example provided. For optimal performance, we recommend a server with the following specs:
 
-
 RAM: 256+ GB
 
 CPU: 8+ cores, 3.1+ GHz/core
@@ -28,12 +27,15 @@ Once R is installed, type ‘R’ to enter into console, install the packages ne
 
 The versions of packages are:
 optparse: 1.6.0
+
 ### Other requirements 
+
 PERL version 5.18
 
 C++(gcc) compiler
 
 # Installation Guide
+
 To install the package, use git clone:
 
     git clone https://github.com/rowickalab/qDSB-Seq.git
@@ -55,6 +57,7 @@ Bowtie should be installed before running the code:
 Please download hygestat_bless in iSeq package for read preprocessing: https://github.com/rowickalab/iSeq
 
 # Instruction for use
+
 qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy use. To get help, type ‘perl qDSB-Seq.pl’ on the command line of Linux. 
 
 qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
@@ -131,5 +134,6 @@ output.DSBs.summary.txt contains DSBs per cell on the whole reference genome.
     test    G1      NotI    498320  501485  0.103111        0.207532        0.06483 0.175323        2       1
 
 # Citation
+
 Please cite our paper on BioRxiv:
 Zhu, Y. et al. qDSB-Seq: quantitative DNA double-strand break sequencing. BioRxiv, doi:https://doi.org/10.1101/171405 (2019). 
