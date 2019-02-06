@@ -36,17 +36,28 @@ C++(gcc) compiler
 # Installation Guide
 To install the package, use git clone:
 
+
+
 Or download the package and then unzip:
+
+
 
 Compile btt software that convert bowtie output (gcc required):
 
     cd src
     make
 
+Bowtie should be installed before running the code:
+1) download bowtie: http://bowtie-bio.sourceforge.net/index.shtml
+2) install it to the local directory
+3) add bowtie software to the path that can be found by enviroment
+
+Please download hygestat_bless in iSeq package for read preprocessing: https://github.com/rowickalab/iSeq
+
 # Instruction for use
 qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy use. To get help, type ‘perl qDSB-Seq.pl’ on the command line of Linux. 
 
-    qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
+qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
 
     1) map DSB sequencing data to genome, and call depth
     2) map gDNA sequencing data to genome, and calculate enzyme cutting efficiency
@@ -85,6 +96,10 @@ Before running the code, who should prepare or use the input data as follows:
 3.bowtie index of reference genome built by bowtie
 
     reference_genome/test.reference_genome.bowtie
+
+To build your bowtie index:
+
+    bowtie-build reference_genome index_prefix
 
 4.enzyme cutting sites, it can be obtain from XXX
   
