@@ -9,7 +9,7 @@ Custom code for quantitative DSB sequencing (qDSB-Seq)
 
 
 # Overview
-With the development of label-based DSB sequencing technologies, DSB quantification and normalization is becoming important. qDSB-Seq, a quantitative DSB sequencing strategy, provides an optimized solution to measure DSB numbers per cell and their precise genomic coordinates at the same time. Here we provide a package for qDSB-Seq analysis. 
+With the development of label-based DSB sequencing technologies, DSB quantification and normalization is becoming important. qDSB-Seq, a quantitative DSB sequencing strategy, provides an optimized solution to measure DSB numbers per cell and their precise genomic coordinates at the same time. Here we provide a package for qDSB-Seq data analysis. 
 
 # System requirement
 ## Hardware Requirements
@@ -28,6 +28,7 @@ Linux: Fedora 20
 ### Installing R version 3.5.1
 1.	Download R from http://cran.us.r-project.org/, click “Download R for Linux” to download the latest version.
 2.	Install R. Leave all default settings in the installation options.
+
 ### R package dependencies 
 Once R is installed, type ‘R’ to enter into console, install the packages needed:
 
@@ -52,7 +53,7 @@ or download the package and then unzip:
 
     unzip qDSB-Seq-master.zip
 
-Compile btt software that convert bowtie output (gcc required):
+Compile btt software that converts bowtie output (gcc required):
 
     cd src
     make
@@ -89,7 +90,7 @@ qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy
     -b CHARACTER        backgrond coordinates on genome to remove background noise from cutting efficiency calculation
     -p CHARACTER        output prefix
 
-Here you can follow the example to learn how to run this code. This example comes from real budding yeast data set. The genome is cleaved by NotI enzyme.
+Here you can follow the example to learn how to run this code. This example comes from a real budding yeast data set. The genome is cleaved by NotI enzyme.
 
 Before running the code, you should prepare or use the input data as follows:
  
@@ -114,11 +115,11 @@ To build your own bowtie index:
 
     bowtie-build reference_genome index_prefix
 
-4) enzyme cutting sites, it can be obtain from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
+4) enzyme cutting sites, it can be obtained from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
   
     NotI.bed
 
-5) genome background to remove noise from DSB sequencing data.
+5) genome background to remove noise from gDNA sequencing data and calibrate enzyme cutting efficiency.
   
     background.bed
    
@@ -126,13 +127,13 @@ To generate your own genome background file run:
 
     Rscript ../R/generate_background_bed.R chromosome_length number_of_locations output
     
-To run the code for our example:
+Once you prepared the input data, you can run qDSB-seq.pl for DSB numbers per cell:
 
     cd example
 
     perl ../qDSB-seq.pl test_i-BLESS.seq test_gDNA.R1.seq test_gDNA.R2.seq -s test -r G1 -g yeast -f reference_genome/test.reference_genome.fas -i reference_genome/test.reference_genome.bowtie -e NotI -t 5 -c NotI.bed -b background.bed -p output
     
-This example data set was cleaved by NotI enzyme, which creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by '-t 5'.
+This example data set was cleaved by NotI enzyme, which creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by setting '-t 5'.
 
 Running this code will result in creation of two directories and one summary file: 
 
@@ -141,8 +142,10 @@ Running this code will result in creation of two directories and one summary fil
     output.DSBs.summary.txt
 
 process_DSB-seq_data includes mapping file and coverage files on DSB sequencing data. 
+
 process_gDNA_data includes mapping file and cutting efficiency files. Enzyme cutting efficiencies and genome background are under cutting_efficiency_NotI.
-output.DSBs.summary.txt contains DSBs per cell on the whole reference genome: 
+
+output.DSBs.summary.txt contains DSBs per cell or DSB frequencies on the whole reference genome: 
 
     sample_name     group   enzyme_name     reads_from_enzyme       reads_from_studied_DSBs fcut_rmbg       DSBs    DSBs_sd_by_site DSBs_sd_by_fcut nsites  cor_fcut_labeled_reads
     test    G1      NotI    498320  501485  0.103111        0.207532        0.06483 0.175323        2       1
