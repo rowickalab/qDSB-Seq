@@ -58,7 +58,6 @@ Compile btt software that convert bowtie output (gcc required):
     make
 
 It takes about 5 seconds to compile btt.
-
 Bowtie should be installed before running the code:
 1) download bowtie: http://bowtie-bio.sourceforge.net/index.shtml
 2) install it to the local directory
@@ -89,7 +88,7 @@ qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy
     -b CHARACTER        backgrond coordinates on genome to remove background noise from cutting efficiency calculation
     -p CHARACTER        output prefix
 
-Here you can follow the example to learn how to run this code. This example come from real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
+Here you can follow our example to learn how to run this code. This example comes from a real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
 
 Before running the code, who should prepare or use the input data as follows:
  
