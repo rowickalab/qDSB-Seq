@@ -26,7 +26,7 @@ This package is supported for Linux operating systems. The package has been test
 Linux: Fedora 20
 
 ### Installing R version 3.5.1
-1.	Download R from http://cran.us.r-project.org/, click “Download R for Linux” to download latest version.
+1.	Download R from http://cran.us.r-project.org/, click “Download R for Linux” to download the latest version.
 2.	Install R. Leave all default settings in the installation options.
 ### R package dependencies 
 Once R is installed, type ‘R’ to enter into console, install the packages needed:
@@ -58,6 +58,7 @@ Compile btt software that convert bowtie output (gcc required):
     make
 
 It takes about 5 seconds to compile btt.
+
 Bowtie should be installed before running the code:
 1) download bowtie: http://bowtie-bio.sourceforge.net/index.shtml
 2) install it to the local directory
@@ -88,11 +89,11 @@ qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy
     -b CHARACTER        backgrond coordinates on genome to remove background noise from cutting efficiency calculation
     -p CHARACTER        output prefix
 
-Here you can follow our example to learn how to run this code. This example comes from a real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
+Here you can follow the example to learn how to run this code. This example comes from real budding yeast data set. The genome is cleaved by NotI enzyme.
 
-Before running the code, who should prepare or use the input data as follows:
+Before running the code, you should prepare or use the input data as follows:
  
-1)sequencing reads from DSB sequencing, only sequence without name and quality inside
+1) sequencing reads from DSB sequencing (only sequence without names and quality scores)
     
     test_i-BLESS.seq
     
@@ -100,12 +101,12 @@ Before running the code, who should prepare or use the input data as follows:
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
-2)paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
+2) paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads (only sequence without names and quality scores)
 
     test_gDNA.R1.seq
     test_gDNA.R2.seq
 
-3)bowtie index of reference genome built by bowtie
+3) bowtie index of reference genome built by bowtie
 
     reference_genome/test.reference_genome.bowtie
 
@@ -113,15 +114,15 @@ To build your own bowtie index:
 
     bowtie-build reference_genome index_prefix
 
-4)enzyme cutting sites, it can be obtain from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
+4) enzyme cutting sites, it can be obtain from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
   
     NotI.bed
 
-5)genome background to remove sequencing fragmentation noise.
+5) genome background to remove noise from DSB sequencing data.
   
     background.bed
    
-For your own genome background:
+To generate your own genome background file run:
 
     Rscript ../R/generate_background_bed.R chromosome_length number_of_locations output
     
@@ -131,9 +132,9 @@ To run the code for our example:
 
     perl ../qDSB-seq.pl test_i-BLESS.seq test_gDNA.R1.seq test_gDNA.R2.seq -s test -r G1 -g yeast -f reference_genome/test.reference_genome.fas -i reference_genome/test.reference_genome.bowtie -e NotI -t 5 -c NotI.bed -b background.bed -p output
     
-This example was cleaved by NotI enzyme, which cleaves the substrate sequences and creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by '-t 5'.
+This example data set was cleaved by NotI enzyme, which creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by '-t 5'.
 
-By running this code, it will produce two directories and one summary file. 
+Running this code will result in creation of two directories and one summary file: 
 
     process_DSB-seq_data
     process_gDNA_data
@@ -148,5 +149,5 @@ output.DSBs.summary.txt contains DSBs per cell on the whole reference genome:
 
 # Citation
 
-Please cite our paper on BioRxiv:
+Please cite our BioRxiv pre-print:
 Zhu, Y. et al. qDSB-Seq: quantitative DNA double-strand break sequencing. BioRxiv, doi:https://doi.org/10.1101/171405 (2019). 
