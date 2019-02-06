@@ -48,7 +48,7 @@ To install the package, use git clone:
 
     git clone https://github.com/rowickalab/qDSB-Seq.git
 
-Or download the package and then unzip:
+or download the package and then unzip:
 
     unzip qDSB-Seq-master.zip
 
@@ -89,7 +89,7 @@ qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy
     -b CHARACTER        backgrond coordinates on genome to remove background noise from cutting efficiency calculation
     -p CHARACTER        output prefix
 
-Here who can follow the example to learn how to run this code. This example come from real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
+Here you can follow the example to learn how to run this code. This example come from real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
 
 Before running the code, who should prepare or use the input data as follows:
  
