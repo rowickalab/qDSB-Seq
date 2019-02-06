@@ -9,7 +9,8 @@ With the development of label-based DSB sequencing technologies, DSB quantificat
 The qDSB-Seq package requires only a computer with enough RAM to support the operations defined by a user. The RAM depends on how big the datasets and the genome size are. For minimal performance, this will be a computer with about 128 GB of RAM. For optimal performance, we recommend a computer with the following specs:
 
 RAM: 256+ GB
-CPU: 4+ cores, 3.3+ GHz/core
+
+CPU: 4+ cores, 3.1+ GHz/core
 
 ## Software Requirements
 ### OS Requirements
