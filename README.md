@@ -36,11 +36,11 @@ C++(gcc) compiler
 # Installation Guide
 To install the package, use git clone:
 
-
+https://github.com/rowickalab/qDSB-Seq.git
 
 Or download the package and then unzip:
 
-
+    unzip qDSB-Seq-master.zip
 
 Compile btt software that convert bowtie output (gcc required):
 
