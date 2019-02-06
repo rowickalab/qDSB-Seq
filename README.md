@@ -50,6 +50,8 @@ Compile btt software that convert bowtie output (gcc required):
     cd src
     make
 
+It takes about 5 seconds to compile btt.
+
 Bowtie should be installed before running the code:
 1) download bowtie: http://bowtie-bio.sourceforge.net/index.shtml
 2) install it to the local directory
