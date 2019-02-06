@@ -15,6 +15,7 @@ CPU: 8+ cores, 3.1+ GHz/core
 ## Software Requirements
 ### OS Requirements
 This package is supported for Linux operating systems. The package has been tested on the following systems:
+
 Linux: Fedora 20
 
 ### Installing R version 3.5.1
@@ -54,7 +55,7 @@ Bowtie should be installed before running the code:
 2) install it to the local directory
 3) add bowtie software to the path that can be found by enviroment
 
-Please download hygestat_bless in iSeq package for read preprocessing: https://github.com/rowickalab/iSeq
+Please download hygestat_bless in iSeq package for reads preprocessing if needed: https://github.com/rowickalab/iSeq
 
 # Instruction for use
 
@@ -64,7 +65,7 @@ qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
 
     1) map DSB sequencing data to genome, and call depth
     2) map gDNA sequencing data to genome, and calculate enzyme cutting efficiency
-    3) calculate DSB frequencies per cell on the whole genome or specific locations
+    3) calculate DSB numbers per cell on the whole genome or specific locations
 
     Usage: perl ../qDSB-seq.pl <DSB reads> <gDNA reads R1> <gDNA reads R2> [options]
 
@@ -79,11 +80,11 @@ qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
     -b CHARACTER        backgrond coordinates on genome to remove background noise from cutting efficiency calculation
     -p CHARACTER        output prefix
 
-Here who can follow the example to learn how to run this code. This example come from real data, but a selected dataset. The genome is cleaved by NotI enzyme.
+Here who can follow the example to learn how to run this code. This example come from real data of budding yeast, but a selected dataset. The genome is cleaved by NotI enzyme.
 
 Before running the code, who should prepare or use the input data as follows:
  
-1.Sequencing reads from DSB sequencing, only sequence without name and quality inside
+1)Sequencing reads from DSB sequencing, only sequence without name and quality inside
     
     test_i-BLESS.seq
     
@@ -91,24 +92,24 @@ Before running the code, who should prepare or use the input data as follows:
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
-2.Paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
+2)Paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads, only sequence without name and quality inside
 
     test_gDNA.R1.seq
     test_gDNA.R2.seq
 
-3.bowtie index of reference genome built by bowtie
+3)bowtie index of reference genome built by bowtie
 
     reference_genome/test.reference_genome.bowtie
 
-To build your bowtie index:
+To build your own bowtie index:
 
     bowtie-build reference_genome index_prefix
 
-4.enzyme cutting sites, it can be obtain from XXX
+4)enzyme cutting sites, it can be obtain from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
   
     NotI.bed
 
-5.genome background to remove sequencing fragmentation noise. It can be obtained by running R code on command line
+5.genome background to remove sequencing fragmentation noise.
   
     background.bed
    
@@ -116,13 +117,13 @@ For your own genome background:
 
     Rscript ../R/generate_background_bed.R chromosome_length number_of_locations output
     
-To run the code for the example:
+To run the code for our example:
 
     cd example
 
     perl ../qDSB-seq.pl test_i-BLESS.seq test_gDNA.R1.seq test_gDNA.R2.seq -s test -r G1 -g yeast -f reference_genome/test.reference_genome.fas -i reference_genome/test.reference_genome.bowtie -e NotI -t 5 -c NotI.bed -b background.bed -p output
     
-The example was cut by NotI enzyme, which cleaves the substrate sequences and creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by '-t 5'.
+This example was cleaved by NotI enzyme, which cleaves the substrate sequences and creates 5’-overhang. Therefore, we should tell what kind of DNA ends is produced by '-t 5'.
 
 By running this code, it will produce two directories and one summary file. 
 
@@ -132,7 +133,7 @@ By running this code, it will produce two directories and one summary file.
 
 process_DSB-seq_data includes mapping file and coverage files on DSB sequencing data. 
 process_gDNA_data includes mapping file and cutting efficiency files. Enzyme cutting efficiencies and genome background are under cutting_efficiency_NotI.
-output.DSBs.summary.txt contains DSBs per cell on the whole reference genome. 
+output.DSBs.summary.txt contains DSBs per cell on the whole reference genome: 
 
     sample_name     group   enzyme_name     reads_from_enzyme       reads_from_studied_DSBs fcut_rmbg       DSBs    DSBs_sd_by_site DSBs_sd_by_fcut nsites  cor_fcut_labeled_reads
     test    G1      NotI    498320  501485  0.103111        0.207532        0.06483 0.175323        2       1
