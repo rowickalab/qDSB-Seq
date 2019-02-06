@@ -2,10 +2,10 @@
 Custom code for quantitative DSB sequencing (qDSB-Seq)
 
 - [Overview](#Overview)
-- [System requirement](#System requirement)
-- [Installation guide](#Installation Guide)
-- [Instruction for use](#Instruction for use)
-- [Citation]
+- [System requirement](#System-requirement)
+- [Installation guide](#Installation-Guide)
+- [Instruction for use](#Instruction-for-use)
+- [Citation](#Citation)
 
 
 # Overview
