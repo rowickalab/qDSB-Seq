@@ -94,7 +94,7 @@ Here you can follow the example to learn how to run this code. This example come
 
 Before running the code, you should prepare or use the input data as follows:
  
-1) sequencing reads from DSB sequencing (only sequence without names and quality scores)
+1)sequencing reads from DSB sequencing (only sequence without names and quality scores)
     
     test_i-BLESS.seq
     
@@ -102,16 +102,16 @@ Before running the code, you should prepare or use the input data as follows:
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAACC
     GGCCGCCACCATCGCGATGGTAACGGCAGTAGCAACGGTAATGGTGAAC
 
-2) paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads (only sequence without names and quality scores)
+2)paired-end sequencing reads from gDNA sequencing, including R1 and R2 reads (only sequence without names and quality scores)
 
     test_gDNA.R1.seq
     test_gDNA.R2.seq
 
-3) genome sequence in Fasta format
+3)genome sequence in Fasta format
 
     reference_genome/test.reference_genome.fas
 
-4) bowtie index of reference genome built by bowtie
+4)bowtie index of reference genome built by bowtie
 
     reference_genome/test.reference_genome.bowtie
 
@@ -119,11 +119,11 @@ To build your own bowtie index:
 
     bowtie-build reference_genome index_prefix
 
-5) enzyme cutting sites, it can be obtained from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
+5)enzyme cutting sites, it can be obtained from Genome-wide Restriction Enzyme Digestion STatistical Analysis Tool, GREDSTAT, at http://bioputer.mimuw.edu.pl:23456
   
     NotI.bed
 
-6) genome background to remove noise from gDNA sequencing data and calibrate enzyme cutting efficiency.
+6)genome background to remove noise from gDNA sequencing data and calibrate enzyme cutting efficiency.
   
     background.bed
    
