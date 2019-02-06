@@ -63,7 +63,7 @@ Please download hygestat_bless in iSeq package for reads preprocessing if needed
 
 qDSB-Seq.pl integrates the scripts written by R, PERL, C++, and BASH for an easy use. To get help, type ‘perl qDSB-Seq.pl’ on the command line of Linux. 
 
-qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
+    qDSB-seq.pl performs quantitative DSB sequencing analysis, including:
 
     1) map DSB sequencing data to genome, and call depth
     2) map gDNA sequencing data to genome, and calculate enzyme cutting efficiency
