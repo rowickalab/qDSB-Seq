@@ -6,12 +6,15 @@
 Args <- commandArgs()
 
 # load library
+
 script.basename <- dirname(Args[4])
 script.dir <- sub("--file=", "",script.basename)
 source(paste(script.dir,"R/lib_qDSB-seq.R",sep="/"))
 
 #############################################
 ###### pass arguments from command line #####
+#############################################
+
 library("optparse")
 
 option_list = list(
@@ -73,7 +76,8 @@ table_fcut  <- opt$fenzyme
 # Chr Start End Name Total_reads Uncut_reads Left_reads Right_reads Summit_reads Cutting_efficiency Min Max
 table_fbg   <- opt$fbg
 # table of labeled reads on restrictive sites: 
-# Chr     BED_start       BED_end Name    Start   End     Region_size     Total_reads     Perc_total      Plus_reads      Perc_plus       Minus_reads     Perc_minus      Peak_reads      Perc_peak_reads Plus_peak_reads Perc_plus_peak_reads    Minus_peak_reads       Perc_minus_peak_reads   Summit_reads    Perc_summit_reads
+# Chr BED_start BED_end Name Start End Region_size Total_reads Perc_total Plus_reads Perc_plus
+#  Minus_reads Perc_minus Peak_reads Perc_peak_reads Plus_peak_reads Perc_plus_peak_reads Minus_peak_reads Perc_minus_peak_reads Summit_reads Perc_summit_reads
 table_labeled_reads_on_enz     <- opt$renzyme
 # wig contains no. of 1-DSB reads
 wig_labeled_reads_studied    <- opt$rstudied
@@ -92,8 +96,12 @@ summit   <- opt$summit
 # proportion of cut cells
 mixprop  <- opt$mixprop
 
+
 #############################################
+
+
 # load data
+
  # enzyme fcut
 data_fcut <- read.table(table_fcut,header=T)
  # background fcut
@@ -103,80 +111,95 @@ data_labeled_reads_on_enz   <- read.table(table_labeled_reads_on_enz,header=T)
  # Reads on studied DSBs
 data_labeled_reads_studied  <- read.table(wig_labeled_reads_studied)
 
-# remove some columns from data_fcut
+# remove unnecessary columns from data_fcut
+
 drops <- c("Min","Max","Cutting_efficiency_rmbg")
 data_fcut <- data_fcut[, !(names(data_fcut) %in% drops)]
 
 # replace column names
+
 colnames(data_fcut)[6] <- "Uncut_reads"
 colnames(data_fcut)[10] <- "Cutting_efficiency"
 colnames(data_fbg)[6] <- "Uncut_reads"
 colnames(data_fbg)[10] <- "Cutting_efficiency"
 
 # calculate fbg
+
 fbg <- calc_fbg(data_fbg)
 fbg_sd <- calc_fbg_sd(data_fbg)
 
 # calculate fcut by site
+
 data_fcut$Cutting_efficiency <- calc_fcut_by_site(data_fcut,summit)
 data_fcut[is.na(data_fcut)] <- 0
 data_fcut$Cutting_efficiency_rmbg <- data_fcut$Cutting_efficiency - fbg
 data_fcut$Cutting_efficiency_rmbg[data_fcut$Cutting_efficiency_rmbg<0] <- 0
 data_fcut$Cutting_efficiency_rmbg[data_fcut$Cutting_efficiency==1]     <- 1
 
-# add labeled gDNA to fcut
+# add labeled enzyme reads to fcut
+
 data_fcut$labeled_reads = data_labeled_reads_on_enz$Total_reads
 
-write.table(data_fcut,paste(prefix,"fcut.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+# output data_fcut to *.fcut.txt
 
-# remove outliers 
-# filter fcut
-#data_fcut <- filter_fcut_outliers_q10_q90(data_fcut)
-# low coverage
+ # write.table(data_fcut,paste(prefix,"fcut.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+
+# remove outliers based on gDNA coverage, cutting efficiency to reduce bias 
+
+ # filter fcut
+ #data_fcut <- filter_fcut_outliers_q10_q90(data_fcut)
+ # low coverage
 data_fcut <- filter_fcut_low_coverage(data_fcut,gcov)
-# fcut = 0
+ # fcut = 0
 data_fcut <- data_fcut[data_fcut$Cutting_efficiency_rmbg > 0,]
-# fcut thresholds
+ # fcut thresholds
 data_fcut <- data_fcut[data_fcut$Cutting_efficiency_rmbg >= fcut_min & data_fcut$Cutting_efficiency_rmbg <= fcut_max,]
-# labeled reads outliers
-#data_fcut <- filter_fcut_outliers_labeled_reads(data_fcut)
-write.table(data_fcut,paste(prefix,"fcut.filtered.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+ # labeled reads outliers
+ #data_fcut <- filter_fcut_outliers_labeled_reads(data_fcut)
+ # write.table(data_fcut,paste(prefix,"fcut.filtered.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
 
-# no. of sites
+# count no. of cutting sites
+
 nsites <- nrow(data_fcut)
 
 # calculate fcut
+
 fcut <- calc_fcut(data_fcut,summit)
-# fcut removing fbg
+ # remove fbg from fcut
 fcut_rmbg <- fcut - fbg
 
 # calculate standard deviaiton of fcut
-#fcut_sd <- calc_fcut_sd(data_fcut)
+
 fcut_sd <- calc_fcut_sd(data_fcut)
 if( nsites == 1 )
     fcut_sd = round(sd(c(fcut-(fbg+fbg_sd),fcut-(fbg-fbg_sd))),6)
 
-# sum of labeled reads from DSBs
+# count sum of labeled reads from DSBs
+
 sum_of_labeled_reads_studied <- sum(abs(data_labeled_reads_studied$V4))
 
-# sum of labeled reads from enzymes
+# count sum of labeled reads from enzymes
+
 sum_of_labeled_reads_enz <- sum(data_fcut$labeled_reads) 
 
-# number of DSBs
-index_12DSB <- ifelse(index_12DSB==1,2,1)
+# calculate DSBs
+
+index_12DSB   <- ifelse(index_12DSB==1,2,1)
 total_DSBs    <- round((sum_of_labeled_reads_studied * fcut_rmbg * nsites * index_12DSB * mixprop ) /sum_of_labeled_reads_enz,6)
 total_DSBs_sd <- round((sum_of_labeled_reads_studied * fcut_sd * nsites * index_12DSB * mixprop ) / sum_of_labeled_reads_enz,6)
 
 # induced DSBs
+
 induced_DSBs <- fcut_rmbg * nsites
 
 
-###############################################
-####### calculation by individual sites #######
-###############################################
+############################################################
+####### Calculating DSBs by individual cutting sites #######
+############################################################
 
 
-# combined data
+# combine data
+
 combined_data <- data.frame(
   sample = sample_name,
   enzyme = enzyme_name,
@@ -191,27 +214,39 @@ combined_data <- data.frame(
   induced_DSBs=induced_DSBs
 )
 
-write.table(combined_data,paste(prefix,"combined_data.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+ # write.table(combined_data,paste(prefix,"combined_data.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
 
 # calculate DSBs
+
 DSBs_by_site <- round((sum_of_labeled_reads_studied * data_fcut$Cutting_efficiency_rmbg * index_12DSB * mixprop ) / data_fcut$labeled_reads,6)
+
 DSBs_by_site[!is.finite(DSBs_by_site)] <- 0
 
 
 # store results
+
 results <- data.frame(chr=data_fcut$Chr,start=data_fcut$Start,end=data_fcut$End,fcut=data_fcut$Cutting_efficiency_rmbg,reads_enz=data_fcut$labeled_reads,DSBs_by_site=DSBs_by_site)
 
-write.table(results,paste(prefix,"DSBs.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+# write.table(results,paste(prefix,"DSBs.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
 
 ##############################################
 ################### summary ##################
 ##############################################
 
+# fcut calculated by average of all individual sites
+
 fcut_by_site_avg <- round(mean(data_fcut$Cutting_efficiency_rmbg),6)
+
 fcut_by_site_sd  <- round(sd(data_fcut$Cutting_efficiency_rmbg),6)
-DSBs_avg <- round(mean(results$DSBs_by_site),6)
-DSB_sd   <- round(sd(results$DSBs_by_site),6)
+
+# DSBs averaged by sites
+
+DSBs_avg         <- round(mean(results$DSBs_by_site),6)
+
+DSB_sd           <- round(sd(results$DSBs_by_site),6)
+
 # calculate correlation between cutting efficiency and labeled reads
+
 cor_fcut_labeled_reads <- round(cor(data_fcut$Cutting_efficiency_rmbg,data_fcut$labeled_reads,method="pearson"),3)
 
 summary <- c(

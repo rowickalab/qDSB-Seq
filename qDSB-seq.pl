@@ -60,12 +60,18 @@ GetOptions( 's=s' => \$sample_name,
 
 my $chr_length="$genome_sequence.length";
 if( $genome_sequence ){
-    `$Bin/PERL/fastaLength.pl $genome_sequence > $genome_sequence.length 2>$genome_sequence.length.bed`;
+    `perl $Bin/PERL/fastaLength.pl $genome_sequence > $genome_sequence.length 2>$genome_sequence.length.bed`;
 }
+
+# 1) map DSB sequencing data to genome, and call depth
 
 `sh $Bin/process_DSB-seq_data.sh $genome_name $chr_length $bowtie_index $enzyme_name $enzyme_type $enzyme_cutting_sites $DSB_reads $prefix`;
 
+# 2) map gDNA sequencing data to genome, and calculate enzyme cutting efficiency
+
 `sh $Bin/process_gDNA_data.sh $genome_name $chr_length $bowtie_index $enzyme_name $enzyme_type $enzyme_cutting_sites $gDNA_reads_1 $gDNA_reads_2 $background $prefix`;
+
+# 3) calculate DSB frequencies per cell on the whole genome or specific locations 
 
 my $switch='';
 if( $enzyme_type eq '5' ){

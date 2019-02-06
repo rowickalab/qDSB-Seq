@@ -72,7 +72,7 @@ then
         # create startDepth.wig, startDepth.plus_and_minus.wig, startDepth.plus-minus.wig
         #echo $BINDIR/PERL/btt_to_depth_fast.pl ../$btt_dir/$Prefix\.bt.btt $chr_length $Prefix 1 1 
         #echo ""
-        $BINDIR/PERL/btt_to_depth_fast.pl ../$btt_dir/$Prefix\.bt.btt $chr_length $Prefix 1 1 > $Prefix\.btt_to_depth.log 2>&1
+        perl $BINDIR/PERL/btt_to_depth_fast.pl ../$btt_dir/$Prefix\.bt.btt $chr_length $Prefix 1 1 > $Prefix\.btt_to_depth.log 2>&1
 
         echo "Done"
 fi
@@ -88,7 +88,7 @@ then
 
         #echo $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.wig -d $enzyme_reads_dir -p $Prefix.$enzyme_name 
         #echo ""
-        $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.wig -d $enzyme_reads_dir -p $Prefix.$enzyme_name > $enzyme_reads_dir.log 2>&1
+        perl $BINDIR/PERL/countReads.pl $enzyme_cutting_sites $depth_dir/$Prefix.startDepth.plus_and_minus.wig -d $enzyme_reads_dir -p $Prefix.$enzyme_name > $enzyme_reads_dir.log 2>&1
 
         echo "Done"
 fi
