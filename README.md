@@ -165,5 +165,5 @@ Running this code will result in creation of two directories and one summary fil
 
 # Citation
 
-Please cite our BioRxiv pre-print:
+Please cite our paper published in Nature Communications:
 Zhu Y, Biernacka A, Pardo B, Dojer N, Forey R, Skrzypczak M, Fongang B, Nde J, Yousefi R, Pasero P, Ginalski K and Rowicka M. qDSB-Seq: quantitative DNA double-strand break sequencing. Nature Communications (2019) (In press).
