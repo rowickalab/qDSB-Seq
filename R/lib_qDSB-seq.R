@@ -15,6 +15,22 @@ calc_fcut <- function(data,summit){
     fcut
 }
 
+calc_fcut_poisson <- function(data,summit){
+  
+  sum_uncut <- sum(data$Uncut_reads)
+  sum_cut   <- sum(data$Left_reads) + sum(data$Right_reads)
+  
+  fcut <- round(sum_cut/(sum_cut+2*sum_uncut),6)
+  fcut_min <- (sum_cut-sqrt(sum_cut))/(sum_cut-sqrt(sum_cut)+2*(sum_uncut+sqrt(sum_uncut)))
+  fcut_max <- (sum_cut+sqrt(sum_cut))/(sum_cut+sqrt(sum_cut)+2*(sum_uncut-sqrt(sum_uncut)))
+  if( summit == 1 ){
+    fcut <- round(sum_cut/(sum_cut+sum_uncut),6)
+    fcut_min <- (sum_cut-sqrt(sum_cut))/(sum_cut-sqrt(sum_cut)+sum_uncut+sqrt(sum_uncut))
+    fcut_max <- (sum_cut+sqrt(sum_cut))/(sum_cut+sqrt(sum_cut)+sum_uncut-sqrt(sum_uncut))
+  }
+  return((fcut_max - fcut_min)/2)
+}
+
 calc_fcut_by_site <- function(data,summit){
 
     sum_uncut <- data$Uncut_reads

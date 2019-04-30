@@ -19,11 +19,11 @@ library("optparse")
 
 option_list = list(
   make_option(c("-s", "--sample"), type="character", default="unknown", 
-              help="sample name [default= %default]", metavar="character"),
+              help="sample name [default = %default]", metavar="character"),
   make_option(c("-e", "--enzyme"), type="character", default="unknown", 
-              help="enzyme name [default= %default]", metavar="character"),
+              help="enzyme name [default = %default]", metavar="character"),
   make_option(c("-g", "--group"), type="character", default="unknown", 
-              help="group name [default= %default]", metavar="character"),
+              help="group name [default = %default]", metavar="character"),
   make_option(c("-m", "--fenzyme"), type="character", default=NULL, 
               help="cutting efficiencies of enzyme 
               [TABLE FILE: 
@@ -38,22 +38,26 @@ option_list = list(
                   Chr     BED_start       BED_end Name    Start   End     Region_size     Total_reads     Perc_total
                       Plus_reads      Perc_plus       Minus_reads     Perc_minus      Peak_reads      Perc_peak_reads Plus_peak_reads Perc_plus_peak_reads    
                       Minus_peak_reads       Perc_minus_peak_reads   Summit_reads    Perc_summit_reads]", metavar="character"),
-  make_option(c("-d", "--rstudied"), type="character", default=NULL, 
-              help="labeled reads on studied positions [WIG FILE: Chr start end coverage, NOTE: no header in WIG file]", metavar="character"),
+  make_option(c("-d", "--rstudied"), type="character", default="empty", 
+              help="labeled reads on studied positions [bedGraph FILE: Chr start end coverage, NOTE: no header in bedGraph file, alternative in -d, -y, -z]", metavar="character"),
+  make_option(c("-y", "--rstudiedtotal"), type="double", default=-1, 
+              help="the total number of labeled reads [optional, alternative in -d, -y, -z]", metavar="character"),
+  make_option(c("-z", "--rstudiedlist"), type="character", default="empty", 
+              help="A list of the number of labeled reads, one column [optional, alternative in -d, -y, -z]", metavar="character"),
   make_option(c("-t", "--type"), type="integer", default=2, 
-              help="type of DSBs, 1 for 1-ended, 2 for 2-ended, [default= %default]", metavar="character"),
+              help="type of DSBs, 1 for 1-ended, 2 for 2-ended, [default = %default]", metavar="character"),
   make_option(c("-c", "--coverage"), type="integer", default=100, 
-              help="minimum of coverage for gDNA reads on cutting site, [default= %default]", metavar="character"),
+              help="minimum of coverage for gDNA reads on cutting site, [default = %default]", metavar="character"),
   make_option(c("-n", "--fmin"), type="double", default=0, 
-              help="minimum of cutting efficiency used for quantification, [default= %default]", metavar="character"),
+              help="minimum of cutting efficiency used for quantification, [default = %default]", metavar="character"),
   make_option(c("-a", "--fmax"), type="double", default=1, 
-              help="maximum of cutting efficiency used for quantification, [default= %default]", metavar="character"),
-  make_option(c("-p", "--prefix"), type="character", default="unknown", 
-              help="output prefix", metavar="character"),
+              help="maximum of cutting efficiency used for quantification, [default = %default]", metavar="character"),
+  make_option(c("-p", "--prefix"), type="character", default="output", 
+              help="output prefix, [default = %default]", metavar="character"),
   make_option(c("-u", "--summit"), type="integer", default=0, 
-              help="use summit of left and right side of cutting site to calculate cutting efficiency, set to 1, [default= %default]", metavar="character"),
+              help="use summit of left and right side of cutting site to calculate cutting efficiency, set to 1, [default = %default]", metavar="character"),
   make_option(c("-x", "--mixprop"), type="double", default=1, 
-              help="proportion of cut cells, [default= %default]", metavar="character")
+              help="proportion of cut cells, [default = %default]", metavar="character")
 )
 
 opt_parser = OptionParser(option_list=option_list);
@@ -79,8 +83,12 @@ table_fbg   <- opt$fbg
 # Chr BED_start BED_end Name Start End Region_size Total_reads Perc_total Plus_reads Perc_plus
 #  Minus_reads Perc_minus Peak_reads Perc_peak_reads Plus_peak_reads Perc_plus_peak_reads Minus_peak_reads Perc_minus_peak_reads Summit_reads Perc_summit_reads
 table_labeled_reads_on_enz     <- opt$renzyme
-# bedGraph contains no. of 1-DSB reads
-bedGraph_labeled_reads_studied    <- opt$rstudied
+# bedGraph contains no. of labeled reads
+bedGraph_labeled_reads_studied <- opt$rstudied
+# total number of labled reads
+total_labeled_reads_studied <- opt$rstudiedtotal
+# a list of the number of labled reads
+list_labeled_reads_studied <- opt$rstudiedlist
 # an index for 1-DSB and 2DSB calculation, if 1-DSB the index is 2, if 2-DSB it is 1
 index_12DSB <- opt$type
 # minimum of coverage for gDNA reads on cutting site
@@ -99,7 +107,6 @@ mixprop  <- opt$mixprop
 
 #############################################
 
-
 # load data
 
  # enzyme fcut
@@ -108,8 +115,16 @@ data_fcut <- read.table(table_fcut,header=T)
 data_fbg  <- read.table(table_fbg,header=T)
  # Reads on cutting sites
 data_labeled_reads_on_enz   <- read.table(table_labeled_reads_on_enz,header=T)
+
  # Reads on studied DSBs
-data_labeled_reads_studied  <- read.table(bedGraph_labeled_reads_studied)
+if( bedGraph_labeled_reads_studied != "empty" ){
+  data_labeled_reads_studied <- read.table(bedGraph_labeled_reads_studied)
+}else if( total_labeled_reads_studied > -1 ){
+  data_labeled_reads_studied <- data.frame(V1="chr",V2="1",V3="1",V4=total_labeled_reads_studied)
+}else if( list_labeled_reads_studied != "empty" ){
+  data_labeled_reads_studied <- read.table(list_labeled_reads_studied)
+  data_labeled_reads_studied <- data.frame(V1="chr",V2="1",V3="1",V4=data_labeled_reads_studied$V1)
+}
 
 # remove unnecessary columns from data_fcut
 
@@ -171,12 +186,16 @@ fcut_rmbg <- fcut - fbg
 # calculate standard deviaiton of fcut
 
 fcut_sd <- calc_fcut_sd(data_fcut)
-if( nsites == 1 )
-    fcut_sd = round(sd(c(fcut-(fbg+fbg_sd),fcut-(fbg-fbg_sd))),6)
+
+if( nsites == 1 ){ # calcuate fcut by Poisson distribution and fbg_sd
+    fcut_sd_poisson <- calc_fcut_poisson(data_fcut,summit)
+    
+    fcut_sd = round(sqrt(fcut_sd_poisson**2+fbg_sd**2),6)
+}
 
 # count sum of labeled reads from DSBs
-
 sum_of_labeled_reads_studied <- sum(abs(data_labeled_reads_studied$V4))
+print(sum_of_labeled_reads_studied)
 
 # count sum of labeled reads from enzymes
 
@@ -209,21 +228,21 @@ induced_DSBs <- fcut_rmbg * nsites
 
 # combine data
 
-combined_data <- data.frame(
-  sample = sample_name,
-  enzyme = enzyme_name,
-  group = group,
-  sum_of_reads_enz    = sum_of_labeled_reads_enz,
-  sum_of_reads_studied = sum_of_labeled_reads_studied,
-  reads_enz = data_fcut$labeled_reads,
-  fcut      = data_fcut$Cutting_efficiency_rmbg,
-  fcut_sd   = fcut_sd,
-  DSBs = total_DSBs,
-  DSBs_sd = total_DSBs_sd,
-  induced_DSBs=induced_DSBs
-)
+#combined_data <- data.frame(
+#  sample = sample_name,
+#  enzyme = enzyme_name,
+#  group = group,
+#  sum_of_reads_enz    = sum_of_labeled_reads_enz,
+#  sum_of_reads_studied = sum_of_labeled_reads_studied,
+#  reads_enz = data_fcut$labeled_reads,
+#  fcut      = data_fcut$Cutting_efficiency_rmbg,
+#  fcut_sd   = fcut_sd,
+#  DSBs = total_DSBs,
+#  DSBs_sd = total_DSBs_sd,
+#  induced_DSBs=induced_DSBs
+#)
 
- # write.table(combined_data,paste(prefix,"combined_data.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
+# write.table(combined_data,paste(prefix,"combined_data.txt",sep="."),quote=FALSE,sep="\t",col.names=T,row.names=F)
 
 # calculate DSBs
 
@@ -232,7 +251,7 @@ DSBs_by_site <- round((sum_of_labeled_reads_studied * data_fcut$Cutting_efficien
 DSBs_by_site[!is.finite(DSBs_by_site)] <- 0
 
 
-# store results
+# store results of DSBs by site
 
 results <- data.frame(chr=data_fcut$Chr,start=data_fcut$Start,end=data_fcut$End,fcut=data_fcut$Cutting_efficiency_rmbg,reads_enz=data_fcut$labeled_reads,DSBs_by_site=DSBs_by_site)
 
